@@ -1,22 +1,17 @@
 /**
- * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md.
  */
 
 // The editor creator to use.
 import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
 
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
-import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
-import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
-import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
+import GsysChooser from './gsyschooser';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Image from '@ckeditor/ckeditor5-image/src/image';
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
@@ -30,23 +25,17 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
-import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 
-class ClassicEditor extends ClassicEditorBase {}
-class InlineEditor extends InlineEditorBase {}
+export default class ClassicEditor extends ClassicEditorBase {}
 
 // Plugins to include in the build.
-const plugins = [
+ClassicEditor.builtinPlugins = [
 	Essentials,
-	UploadAdapter,
 	Autoformat,
 	Bold,
 	Italic,
-        Underline,
-        Strikethrough,
 	BlockQuote,
-	CKFinder,
-	EasyImage,
+	GsysChooser,
 	Heading,
 	Image,
 	ImageCaption,
@@ -59,36 +48,27 @@ const plugins = [
 	Paragraph,
 	PasteFromOffice,
 	Table,
-	TableToolbar,
-        Alignment
+	TableToolbar
 ];
-ClassicEditor.builtinPlugins = plugins;
-InlineEditor.builtinPlugins = plugins;
 
 // Editor configuration.
-const config = {
+ClassicEditor.defaultConfig = {
 	toolbar: {
 		items: [
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikethrough',
-                    '|',
-                    'undo',
-                    'redo',
-                    '|',
-                    'bulletedList',
-                    'numberedList',
-                    '|',
-                    'blockQuote',
-                    'alignment',
-                    '|',
-                    'heading',
-                    '|',
-                    'link',
-                    'imageUpload',
-                    'insertTable',
-                    'mediaEmbed',
+			'heading',
+			'|',
+			'bold',
+			'italic',
+			'link',
+			'bulletedList',
+			'numberedList',
+			'imageUpload',
+			'blockQuote',
+			'insertTable',
+			'mediaEmbed',
+			'undo',
+			'redo',
+			'gsyschooser'
 		]
 	},
 	image: {
@@ -108,10 +88,4 @@ const config = {
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en'
-};
-ClassicEditor.defaultConfig = config;
-InlineEditor.defaultConfig = config;
-
-export default {
-    ClassicEditor, InlineEditor
 };
