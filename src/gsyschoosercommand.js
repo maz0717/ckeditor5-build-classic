@@ -26,21 +26,20 @@ export default class GsysChooserCommand extends Command {
 		const editor = this.editor;
 		const editorDoc = editor.sourceElement.ownerDocument;
 		const editorWin = editorDoc.defaultView;
-
 		const chooserUrl = editor.config.get( 'gsys.chooserUrl' );
 		if ( !chooserUrl || !chooserUrl.length ) {
 			return;
 		}
 
 		/*
-        const feat = 'alwaysRaised=yes,dependent=yes,height=' + editorWin.screen.height + ',location=no,menubar=no,' +
-          'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + editorWin.screen.width;
-          */
+         const feat = 'alwaysRaised=yes,dependent=yes,height=' + editorWin.screen.height + ',location=no,menubar=no,' +
+           'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + editorWin.screen.width;
+		*/
 		const feat = 'alwaysRaised=yes,dependent=yes,minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no';
-		editorWin.open( chooserUrl, 'gsyschooser', feat );
+		const chooser = editorWin.open( chooserUrl, 'gsyschooser', feat );
 
-		editorWin.addEventListener( 'file:choose', evt => {
-			const files = evt.data.files.toArray();
+		const fileListener = evt => {
+			const files = evt.detail.files;
 
 			// Insert links
 			const links = files.filter( file => !file.isImage() );
@@ -54,14 +53,16 @@ export default class GsysChooserCommand extends Command {
 
 			for ( const image of images ) {
 				const url = image.getUrl();
-
 				imagesUrls.push( url );
 			}
 
 			if ( imagesUrls.length ) {
 				insertImages( editor, imagesUrls );
 			}
-		}, false );
+			chooser.close();
+			editorWin.removeEventListener( 'file:choose', fileListener );
+		};
+		editorWin.addEventListener( 'file:choose', fileListener, false );
 	}
 }
 
